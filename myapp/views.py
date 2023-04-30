@@ -4,7 +4,8 @@ from .forms import PostForm
 
 def post_list(request):
     posts = Post.objects.all()
-    return
+    context = {'posts': posts}
+    return render(request, 'myapp/post_list.html', context)
 
 def post_create(request):
     if request.method == 'POST':
