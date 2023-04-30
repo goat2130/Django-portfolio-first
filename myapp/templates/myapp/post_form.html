@@ -1,7 +1,9 @@
 {% extends 'myapp/base.html' %}
+{% load static %}
 
 {% block content %}
   <h1>Create a new post</h1>
+  <h2>welcome!</h2>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
