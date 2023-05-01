@@ -6,4 +6,16 @@
   <p>{{ post.content }}</p>
   <p>Posted by {{ post.author }} on {{ post.created_at }}</p>
   <a href="{% url 'post_delete' post.pk %}">Delete</a>
+
+
+<form method="POST" action="{% url 'post_like' post.pk %}">
+  {% csrf_token %}
+  {% if request.user in post.likes.all %}
+      <button type="submit">Unlike</button>
+  {% else %}
+      <button type="submit">Like</button>
+  {% endif %}
+</form>
+<p>{{ post.likes.count }} likes</p>
+
 {% endblock %}
