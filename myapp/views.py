@@ -3,6 +3,12 @@ from .models import Post
 from .forms import PostForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views import generic
+from .forms import SignUpForm
+from django.contrib.auth import login
+
 
 def post_list(request):
     posts = Post.objects.all()
@@ -38,3 +44,20 @@ def post_like(request, pk):
     else:
         post.likes.add(request.user)
     return redirect('post_detail', pk=pk)
+
+class SignUpView(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'registration/signup.html'
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = SignUpForm()
+    return render(request, 'registration/signup.html', {'form': form})

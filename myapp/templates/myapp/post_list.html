@@ -4,6 +4,7 @@
 {% block content %}
   <h1>Post List</h1>
   <a href="{% url 'post_create' %}">Create a new post</a>
+  <a href="{% url 'signup' %}">Sign up</a>
   <ul>
     {% for post in posts %}
       <li><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></li>
