@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, Profile
+from .models import Post, Profile, PostViews
 from .forms import PostForm, ProfileForm, SignUpForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
@@ -9,6 +9,8 @@ from django.views import generic
 from django.contrib.auth import login
 from django.utils import timezone
 from django_comments.models import Comment
+from django.db.models import F, Count
+from django.http import HttpResponseRedirect
 
 
 
@@ -17,8 +19,20 @@ from django_comments.models import Comment
 # Post Function
 def post_list(request):
     posts = Post.objects.all()
-    context = {'posts': posts}
-    return render(request, 'myapp/post_list.html', context)
+    ranked_posts = Post.objects.annotate(num_views=F('views') + 1).order_by('-num_views')[:5]
+
+    # コメントのフォームの処理
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = Post
+            comment.save()
+            return redirect('post_detail', pk=Post.pk)
+    else:
+        form = CommentForm()
+
+    return render(request, 'myapp/post_list.html', {'posts': posts, 'ranked_posts': ranked_posts, 'form': form})
 
 def post_create(request):
     if request.method == 'POST':
@@ -84,7 +98,10 @@ def comment_remove(request, pk):
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    post.views += 1
+    post.save()
     comments = post.comments.filter(approved_comment=True)
+
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -95,6 +112,7 @@ def post_detail(request, pk):
     else:
         form = CommentForm()
     return render(request, 'myapp/post_detail.html', {'post': post, 'form': form, 'comments': comments})
+
 
 def post_new(request):
     if request.method == "POST":
@@ -150,3 +168,23 @@ def profile(request):
 
     return render(request, 'myapp/profile.html', context)
 
+# ranking function
+def increment_views(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    post.views += 1
+    post.save()
+    post_views, created = PostViews.objects.get_or_create(post=post)
+    post_views.views_count += 1
+    post_views.save()
+    ranked_posts = Post.objects.order_by('-views')[:5]
+    return render(request, 'myapp/post_detail.html', {'post': post, 'ranked_posts': ranked_posts})
+
+
+
+def ranking(request):
+    posts = Post.objects.annotate(view_count=Count('views')).order_by('-view_count')[:10]
+    return render(request, 'ranking.html', {'posts': posts})
+
+def ranking_view(request):
+    ranked_posts = Post.objects.order_by('-views')[:10]
+    return render(request, 'myapp/ranking.html', {'ranked_posts': ranked_posts})

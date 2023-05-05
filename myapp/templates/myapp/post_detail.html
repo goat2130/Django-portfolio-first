@@ -38,6 +38,14 @@
     {% endfor %}
   </div>
 
+
+  <h2>{{ post.title }}</h2>
+<p>Published on {{ post.published_date }}</p>
+<p>Views: {{ post.views }}</p>
+<p>{{ post.text|linebreaks }}</p>
+
+
+
   {% if user.is_authenticated %}
     <div class="card my-4">
         <h5 class="card-header">Add Comment</h5>

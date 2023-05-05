@@ -1,7 +1,11 @@
+/* styles.css */
+
+/* Global styles */
 body {
   font-family: sans-serif;
 }
 
+/* Header styles */
 header {
   background-color: #eee;
   padding: 10px;
@@ -69,4 +73,25 @@ header ul {
 
 header .auth-links li:first-child {
   margin-left: auto; /* ログインフォームを右寄せにする */
+}
+
+/* Post List styles */
+.post-section {
+  margin-bottom: 30px;
+}
+
+.ranking-list {
+  list-style: decimal;
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+.post-list {
+  list-style: disc;
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+.post-list li {
+  margin: 5px 0;
 }

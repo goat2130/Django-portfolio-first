@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Ranking</h1>
+<ol>
+{% for post in ranking %}
+<li><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a> ({{ post.views }} views)</li>
+{% endfor %}
+</ol>
+{% endblock %}

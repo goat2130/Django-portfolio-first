@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 from django.contrib.auth.views import LoginView
-from myapp.views import SignUpView, profile
+from myapp.views import SignUpView, profile, increment_views, ranking
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -11,4 +11,6 @@ urlpatterns = [
     path('accounts/login/', LoginView.as_view(), name='login'),
     path('signup/', SignUpView.as_view(), name='signup'),
     path('profile/', profile, name='profile'),
+    path('post/<slug:slug>/increment_views/', increment_views, name='increment_views'),
+    path('ranking/', ranking, name='ranking'),
 ]
