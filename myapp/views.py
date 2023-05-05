@@ -126,7 +126,10 @@ def add_comment_to_post(request, pk):
 
 # profile_function
 def profile(request):
-    profile = Profile.objects.get(user=request.user)
+    try:
+        profile = Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        profile = None
 
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
@@ -136,8 +139,14 @@ def profile(request):
     else:
         form = ProfileForm(instance=profile)
 
+    if profile is None:
+        profile = Profile(user=request.user)
+        profile.save()
+
     context = {
         'form': form,
         'profile': profile
     }
-    return render(request, 'profile.html', context)
+
+    return render(request, 'myapp/profile.html', context)
+
