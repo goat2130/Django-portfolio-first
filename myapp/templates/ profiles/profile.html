@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ profile.user.username }}'s Profile</h1>
+  <img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}" width="200">
+  <p>{{ profile.bio }}</p>
+  <p>{{ profile.location }}</p>
+  <p>{{ profile.website }}</p>
+
+  <h2>Edit Profile</h2>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Changes</button>
+  </form>
+{% endblock %}

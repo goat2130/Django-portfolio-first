@@ -3,16 +3,6 @@
 
 {% block content %}
   <h1>Post List</h1>
-  {% if user.is_authenticated %}
-    <p>Logged in as: {{ user.username }}</p>
-    <form method="post" action="{% url 'logout' %}">
-      {% csrf_token %}
-      <button type="submit">Log out</button>
-    </form>
-  {% else %}
-    <a href="{% url 'login' %}">Log in</a>
-    <a href="{% url 'signup' %}">Sign up</a>
-  {% endif %}
   <a href="{% url 'post_create' %}">Create a new post</a>
   <ul>
     {% for post in posts %}

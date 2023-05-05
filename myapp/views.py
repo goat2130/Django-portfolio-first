@@ -1,17 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post
-from .forms import PostForm
+from .models import Post, Profile
+from .forms import PostForm, ProfileForm, SignUpForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import generic
-from .forms import SignUpForm
 from django.contrib.auth import login
-from .forms import CommentForm
 from django.utils import timezone
 from django_comments.models import Comment
-from django.urls import reverse
 
 
 
@@ -127,3 +124,20 @@ def add_comment_to_post(request, pk):
         form = CommentForm()
     return render(request, 'myapp/add_comment_to_post.html', {'form': form, 'post': post})
 
+# profile_function
+def profile(request):
+    profile = Profile.objects.get(user=request.user)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=profile)
+
+    context = {
+        'form': form,
+        'profile': profile
+    }
+    return render(request, 'profile.html', context)

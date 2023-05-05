@@ -10,6 +10,19 @@
       <h1>My App</h1>
       <ul>
         <li><a href="{% url 'post_list' %}">Home</a></li>
+        {% if user.is_authenticated %}
+          <p>Logged in as: {{ user.username }}</p>
+          <li><a href="{% url 'profile' %}">Edit Profile</a></li>
+          <li>
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit">Log out</button>
+            </form>
+          </li>
+        {% else %}
+          <li><a href="{% url 'login' %}">Log in</a></li>
+          <li><a href="{% url 'signup' %}">Sign up</a></li>
+        {% endif %}
       </ul>
     </div>
     <div id="content">
