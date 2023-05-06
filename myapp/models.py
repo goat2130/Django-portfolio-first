@@ -8,7 +8,7 @@ from django.urls import reverse
 class Post(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
-    author = models.CharField(max_length=50)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='likes', blank=True)

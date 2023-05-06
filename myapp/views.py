@@ -11,7 +11,7 @@ from django.utils import timezone
 from django_comments.models import Comment
 from django.db.models import F, Count
 from django.http import HttpResponseRedirect
-
+from django.views.generic import CreateView
 
 
 
@@ -38,11 +38,14 @@ def post_create(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('post_list')
+            post = form.save(commit=False)
+            post.author = request.user  # ログインしているユーザーを投稿のauthorに設定する
+            post.save()
+            return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm()
     return render(request, 'myapp/post_form.html', {'form': form})
+
 
 # def post_detail(request, pk):
 #    post = get_object_or_404(Post, pk=pk)
@@ -188,3 +191,11 @@ def ranking(request):
 def ranking_view(request):
     ranked_posts = Post.objects.order_by('-views')[:10]
     return render(request, 'myapp/ranking.html', {'ranked_posts': ranked_posts})
+
+class PostCreateView(CreateView):
+    model = Post
+    fields = ['title', 'text']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
