@@ -13,7 +13,6 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='likes', blank=True)
     views = models.IntegerField(default=0)
-    update_date = models.DateTimeField(auto_now=True)
 
     def get_rank(self):
         rank = 0

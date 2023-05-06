@@ -11,8 +11,6 @@ from django.utils import timezone
 from django_comments.models import Comment
 from django.db.models import F, Count
 from django.http import HttpResponseRedirect
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import UpdateView, CreateView
 
 
 
@@ -64,7 +62,7 @@ def post_like(request, pk):
         post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
-    return redirect('post_detail', pk=post.pk)
+    return redirect('post_detail', pk=pk)
 
 class SignUpView(generic.CreateView):
     form_class = UserCreationForm
@@ -190,20 +188,3 @@ def ranking(request):
 def ranking_view(request):
     ranked_posts = Post.objects.order_by('-views')[:10]
     return render(request, 'myapp/ranking.html', {'ranked_posts': ranked_posts})
-
-
-# post update function
-class PostCreateView(LoginRequiredMixin, CreateView):
-    model = Post
-    fields = ['title', 'content']
-    template_name = 'myapp/post_create.html'
-    success_url = reverse_lazy('myapp:post_list')
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return self.handle_no_permission()
-        return super().dispatch(request, *args, **kwargs)
