@@ -199,3 +199,17 @@ class PostCreateView(CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+@login_required
+def post_edit(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return redirect('myapp:post_detail', pk=post.pk)
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'myapp/post_edit.html', {'form': form})

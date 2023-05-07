@@ -5,6 +5,10 @@
   <h1>{{ post.title }}</h1>
   <p>{{ post.content }}</p>
   <p>Posted by {{ post.author }} on {{ post.created_at }}</p>
+  {% if user.is_authenticated and user == post.author %}
+    <a href="{% url 'post_edit' post.pk %}">Edit</a>
+  {% endif %}
+
   <a href="{% url 'post_delete' post.pk %}">Delete</a>
 
   <form method="POST" action="{% url 'post_like' post.pk %}">

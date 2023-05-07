@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block content %}
-<h2>投稿の編集</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">更新</button>
-</form>
+  <h2>Edit Post</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Changes</button>
+  </form>
 {% endblock %}
