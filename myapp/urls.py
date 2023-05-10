@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
-from .views import post_detail, add_comment_to_post
 
+app_name = 'myapp'
 
 urlpatterns = [
     path('', views.post_list, name='post_list'),
