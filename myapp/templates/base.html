@@ -10,7 +10,7 @@
     <header>
       <h1>My App</h1>
       <ul>
-        <li><a href="{% url 'myapp:post_list' %}">Home</a></li>
+        <li><a href="{% url 'post_list' %}">Home</a></li>
         {% if user.is_authenticated %}
           <li class="auth-links">
             <p>Logged in as: {{ user.username }}</p>

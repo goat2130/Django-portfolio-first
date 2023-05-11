@@ -6,12 +6,12 @@
   <p>{{ post.content }}</p>
   <p>Posted by {{ post.author }} on {{ post.created_at }}</p>
   {% if user.is_authenticated and user == post.author %}
-    <a href="{% url 'myapp:post_edit' post.pk %}">Edit</a>
+    <a href="{% url 'post_edit' post.pk %}">Edit</a>
   {% endif %}
 
-  <a href="{% url 'myapp:post_delete' post.pk %}">Delete</a>
+  <a href="{% url 'post_delete' post.pk %}">Delete</a>
 
-  <form method="POST" action="{% url 'myapp:post_like' post.pk %}">
+  <form method="POST" action="{% url 'post_like' post.pk %}">
     {% csrf_token %}
     {% if request.user in post.likes.all %}
         <button type="submit">Unlike</button>
@@ -54,7 +54,7 @@
     <div class="card my-4">
         <h5 class="card-header">Add Comment</h5>
         <div class="card-body">
-          <form method="POST" class="comment-form" action="{% url 'myapp:add_comment_to_post' pk=post.pk %}">
+          <form method="POST" class="comment-form" action="{% url 'add_comment_to_post' pk=post.pk %}">
               {% csrf_token %}
               <div class="form-group">
                   <label for="author">Name:</label>
