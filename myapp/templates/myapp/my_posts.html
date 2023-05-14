@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>My Posts</h1>
+  {% if user_posts %}
+    <ul>
+    {% for post in user_posts %}
+      <li><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p>You haven't created any posts yet.</p>
+  {% endif %}
+{% endblock %}
