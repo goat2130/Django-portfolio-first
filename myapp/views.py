@@ -56,6 +56,10 @@ def post_delete(request, pk):
     post.delete()
     return redirect('post_list')
 
+def my_posts(request):
+    user_posts = Post.objects.filter(author=request.user)
+    return render(request, 'myapp/my_posts.html', {'user_posts': user_posts})
+
 
 
 # login_required

@@ -4,7 +4,6 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-
 class Post(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
@@ -23,11 +22,9 @@ class Post(models.Model):
                 break
         return rank
 
-
     def __str__(self):
         return self.title
 
-from django.conf import settings
 
 
 class Comment(models.Model):
@@ -54,6 +51,16 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+
+#class Connection(models.Model):
+#    user = models.OneToOneField(User, on_delete=models.CASCADE)
+#    following = models.ManyToManyField(User, related_name='following', blank=True)
+
+#   def __str__(self):
+#        return self.user.username
+
 
 
 class PostViews(models.Model):
