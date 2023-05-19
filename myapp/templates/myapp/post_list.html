@@ -21,6 +21,13 @@
   <ul class="post-list">
     {% for post in posts %}
       <li><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></li>
+      {% if post.get_author_avatar_url %}
+                <img src="{{ post.get_author_avatar_url }}" alt="アバター">
+            <h3>{{ post.author.username }}</h3>
+            % if post.icon %}
+            <img src="{{ post.icon.url }}" alt="アイコン">
+        {% endif %}
+        <a href="{% url 'profile' username=post.author.username %}">投稿者のプロフィールへ</a>
     {% empty %}
       <li>No posts yet.</li>
     {% endfor %}
@@ -28,3 +35,19 @@
 </div>
 {% endblock %}
 
+{% for post in posts %}
+    <div class="post">
+        <div class="author-info">
+            {% if post.get_author_avatar_url %}
+                <img src="{{ post.get_author_avatar_url }}" alt="アバター">
+            {% endif %}
+            <h3>{{ post.author.username }}</h3>
+        </div>
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content }}</p>
+        {% if post.icon %}
+            <img src="{{ post.icon.url }}" alt="アイコン">
+        {% endif %}
+        <a href="{% url 'profile' post.author.username %}">投稿者のプロフィールへ</a>
+    </div>
+{% endfor %}

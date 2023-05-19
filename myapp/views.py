@@ -12,6 +12,7 @@ from django_comments.models import Comment
 from django.db.models import F, Count
 from django.http import HttpResponseRedirect
 from django.views.generic import CreateView
+from django.contrib.auth.models import User
 
 
 
@@ -150,30 +151,45 @@ def add_comment_to_post(request, pk):
     return render(request, 'myapp/add_comment_to_post.html', {'form': form, 'post': post})
 
 # profile_function
-def profile(request):
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def profile(request, username):
+    profile_user = get_object_or_404(User, username=username)
     try:
-        profile = Profile.objects.get(user=request.user)
+        profile = Profile.objects.get(user=profile_user)
     except Profile.DoesNotExist:
         profile = None
 
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            form.save()
-            return redirect('profile')
+        # 投稿者とログインユーザーが一致する場合のみ編集を許可する
+        if profile_user == request.user:
+            form = ProfileForm(request.POST, request.FILES, instance=profile)
+            if form.is_valid():
+                form.save()
+                return redirect('profile', username=username)
+            else:
+                # フォームが無効な場合はエラーメッセージを表示
+                error_message = "There was an error in the form."
+        else:
+            # ユーザーが一致しない場合は編集を許可しない
+            error_message = "You are not allowed to edit this profile."
     else:
         form = ProfileForm(instance=profile)
+        error_message = None
 
     if profile is None:
-        profile = Profile(user=request.user)
+        profile = Profile(user=profile_user)
         profile.save()
 
     context = {
         'form': form,
-        'profile': profile
+        'profile': profile,
+        'error_message': error_message
     }
 
     return render(request, 'myapp/profile.html', context)
+
 
 # ranking function
 def increment_views(request, slug):
@@ -217,3 +233,6 @@ def post_edit(request, pk):
     else:
         form = PostForm(instance=post)
     return render(request, 'myapp/post_edit.html', {'form': form})
+
+
+

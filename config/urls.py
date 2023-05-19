@@ -10,7 +10,7 @@ urlpatterns = [
     path('', include('myapp.urls')),
     path('accounts/login/', LoginView.as_view(), name='login'),
     path('signup/', SignUpView.as_view(), name='signup'),
-    path('profile/', profile, name='profile'),
+    path('profile/<str:username>/', profile, name='profile'),
     path('post/<slug:slug>/increment_views/', increment_views, name='increment_views'),
     path('ranking/', ranking, name='ranking'),
     path('my_posts/', my_posts, name='my_posts'),
