@@ -12,6 +12,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='likes', blank=True)
     views = models.IntegerField(default=0)
+    icon = models.ImageField(upload_to='icons/', blank=True, null=True)
 
     def get_rank(self):
         rank = 0
@@ -21,6 +22,9 @@ class Post(models.Model):
                 rank = i + 1
                 break
         return rank
+
+    def get_author_avatar_url(self):
+        return self.author.profile.avatar.url if self.author.profile.avatar else None
 
     def __str__(self):
         return self.title

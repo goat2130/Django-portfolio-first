@@ -15,7 +15,7 @@
           <li class="auth-links">
             <p>Logged in as: {{ user.username }}</p>
             <a href="{% url 'my_posts' %}">My Post</a>
-            <a href="{% url 'profile' %}">Edit Profile</a>
+            <a href="{% url 'profile' user.username %}">Edit Profile</a>
             <form method="post" action="{% url 'logout' %}">
               {% csrf_token %}
               <button type="submit">Log out</button>
