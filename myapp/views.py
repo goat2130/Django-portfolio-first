@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post, Profile, PostViews
+from .models import Post, Profile, PostViews, Connection
 from .forms import PostForm, ProfileForm, SignUpForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
@@ -13,6 +13,8 @@ from django.db.models import F, Count
 from django.http import HttpResponseRedirect
 from django.views.generic import CreateView
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+
 
 
 
@@ -182,13 +184,24 @@ def profile(request, username):
         profile = Profile(user=profile_user)
         profile.save()
 
+    # フォロワーの存在チェック
+    is_following = False
+    followers_count = 0
+    if request.user.is_authenticated:
+        connection, created = Connection.objects.get_or_create(user=request.user)
+        is_following = connection.following.filter(id=profile_user.id).exists()
+        followers_count = Connection.objects.filter(following=profile_user).count()
+
     context = {
         'form': form,
         'profile': profile,
-        'error_message': error_message
+        'error_message': error_message,
+        'is_following': is_following,
+        'followers_count': followers_count,
     }
 
     return render(request, 'myapp/profile.html', context)
+
 
 
 # ranking function
@@ -235,4 +248,21 @@ def post_edit(request, pk):
     return render(request, 'myapp/post_edit.html', {'form': form})
 
 
+@login_required
+def follow(request, username):
+    followed_user = get_object_or_404(User, username=username)
+    connection, created = Connection.objects.get_or_create(user=request.user)
+    connection.following.add(followed_user)
+    followed_user.profile.followers_count += 1
+    followed_user.profile.save()
+    return redirect('profile', username=username)
+
+@login_required
+def unfollow(request, username):
+    followed_user = get_object_or_404(User, username=username)
+    connection, created = Connection.objects.get_or_create(user=request.user)
+    connection.following.remove(followed_user)
+    followed_user.profile.followers_count -= 1
+    followed_user.profile.save()
+    return redirect('profile', username=username)
 

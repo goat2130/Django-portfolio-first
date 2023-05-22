@@ -9,14 +9,32 @@
 <p>{{ profile.location }}</p>
 <p>{{ profile.website }}</p>
 
-{% if request.user == profile.user %}
-<h2>Edit Profile</h2>
-<form method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Save Changes</button>
-</form>
+{% if request.user.is_authenticated %}
+  {% if request.user == profile.user %}
+    <h2>Edit Profile</h2>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Save Changes</button>
+    </form>
+  {% else %}
+    {% if is_following %}
+      <form action="{% url 'unfollow' username=profile.user.username %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">Unfollow</button>
+      </form>
+    {% else %}
+      <form action="{% url 'follow' username=profile.user.username %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">Follow</button>
+      </form>
+    {% endif %}
+  {% endif %}
 {% else %}
-<p>You are not allowed to edit this profile.</p>
+  <p>You need to be logged in to follow this user.</p>
 {% endif %}
+
+<h2>Followers: {{ followers_count }}</h2>
+
+
 {% endblock %}
