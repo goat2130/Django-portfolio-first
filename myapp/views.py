@@ -192,6 +192,8 @@ def profile(request, username):
         is_following = connection.following.filter(id=profile_user.id).exists()
         followers_count = Connection.objects.filter(following=profile_user).count()
 
+    followers = profile.followers.all
+
     context = {
         'form': form,
         'profile': profile,
@@ -266,3 +268,9 @@ def unfollow(request, username):
     followed_user.profile.save()
     return redirect('profile', username=username)
 
+@login_required
+def followers(request, username):
+    user = get_object_or_404(User, username=username)
+    followers = Connection.objects.filter(following=user)
+    context = {'user': user, 'followers': followers}
+    return render(request, 'myapp/followers.html', context)

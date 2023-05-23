@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 from django.contrib.auth.views import LoginView
-from myapp.views import SignUpView, profile, increment_views, ranking, my_posts, follow, unfollow
+from myapp.views import SignUpView, profile, increment_views, ranking, my_posts, follow, unfollow, followers
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -16,4 +16,5 @@ urlpatterns = [
     path('my_posts/', my_posts, name='my_posts'),
     path('follow/<str:username>/', follow, name='follow'),
     path('unfollow/<str:username>/', unfollow, name='unfollow'),
+    path('followers/<str:username>/', followers, name='followers'),
 ]

@@ -35,6 +35,6 @@
 {% endif %}
 
 <h2>Followers: {{ followers_count }}</h2>
-
+<a href="{% url 'followers' username=profile.user.username %}">View Followers</a>
 
 {% endblock %}
