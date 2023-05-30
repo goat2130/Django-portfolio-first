@@ -1,40 +1,63 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ profile.user.username }}'s Profile</h1>
-{% if profile.avatar %}
-  <img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}" width="200">
-{% endif %}
-<p>{{ profile.bio }}</p>
-<p>{{ profile.location }}</p>
-<p>{{ profile.website }}</p>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h1 class="text-center">{{ profile.user.username }}'s Profile</h1>
+      {% if profile.avatar %}
+        <img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}" class="img-fluid mb-3">
+      {% endif %}
+      <div class="card mb-3">
+        {% if profile.avatar %}
+          <img src="{{ profile.avatar.url }}" class="card-img-top" alt="{{ profile.user.username }}">
+        {% endif %}
+        <div class="card-body">
+          <h3 class="card-title">Introduction</h3>
+          <p class="card-text">{{ profile.bio }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <h3 class="card-title">Location</h3>
+            <p class="card-text">{{ profile.location }}</p>
+          </li>
+          <li class="list-group-item">
+            <h3 class="card-title">Website</h3>
+            <p class="card-text">{{ profile.website }}</p>
+          </li>
+        </ul>
+        <div class="card-body">
+          <h5 class="card-title">Followers: {{ followers_count }}</h5>
+          <a href="{% url 'followers' username=profile.user.username %}" class="card-link">View Followers</a>
+        </div>
+      </div>
 
-{% if request.user.is_authenticated %}
-  {% if request.user == profile.user %}
-    <h2>Edit Profile</h2>
-    <form method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Save Changes</button>
-    </form>
-  {% else %}
-    {% if is_following %}
-      <form action="{% url 'unfollow' username=profile.user.username %}" method="POST">
-        {% csrf_token %}
-        <button type="submit">Unfollow</button>
-      </form>
-    {% else %}
-      <form action="{% url 'follow' username=profile.user.username %}" method="POST">
-        {% csrf_token %}
-        <button type="submit">Follow</button>
-      </form>
-    {% endif %}
-  {% endif %}
-{% else %}
-  <p>You need to be logged in to follow this user.</p>
-{% endif %}
 
-<h2>Followers: {{ followers_count }}</h2>
-<a href="{% url 'followers' username=profile.user.username %}">View Followers</a>
-
+      {% if request.user.is_authenticated %}
+        {% if request.user == profile.user %}
+          <h2 class="text-center">Edit Profile</h2>
+          <form method="POST" enctype="multipart/form-data" class="text-center">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </form>
+        {% else %}
+          {% if is_following %}
+            <form action="{% url 'unfollow' username=profile.user.username %}" method="POST" class="text-center">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Unfollow</button>
+            </form>
+          {% else %}
+            <form action="{% url 'follow' username=profile.user.username %}" method="POST" class="text-center">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Follow</button>
+            </form>
+          {% endif %}
+        {% endif %}
+      {% else %}
+        <p class="text-center">You need to be logged in to follow this user.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
 {% endblock %}

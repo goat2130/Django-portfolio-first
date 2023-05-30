@@ -1,13 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>{{ user.username }}'s Followers</h1>
-  <ul>
-    {% for follower in followers %}
-      <li><a href="{% url 'profile' username=follower.user.username %}">{{ follower.user.username }}</a></li>
-    {% empty %}
-      <li>No followers yet.</li>
-    {% endfor %}
-  </ul>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h1 class="text-center">{{ user.username }}'s Followers</h1>
+      {% if followers %}
+        <div class="card-deck">
+          {% for follower in followers %}
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title">{{ follower.user.username }}</h5>
+                <p class="card-text">{{ follower.user.profile.bio|truncatechars:100 }}</p>
+                <a href="{% url 'profile' username=follower.user.username %}" class="btn btn-primary">View Profile</a>
+              </div>
+            </div>
+          {% empty %}
+            <p>No followers yet.</p>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>No followers yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
 {% endblock %}
-
