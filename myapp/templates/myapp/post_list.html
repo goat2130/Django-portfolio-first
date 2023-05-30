@@ -2,52 +2,73 @@
 {% load static %}
 
 {% block content %}
-<h1>Post List</h1>
-<a href="{% url 'post_create' %}">Create a new post</a>
-<div class="post-section">
-  <h2>Post Ranking</h2>
-  <ol class="ranking-list">
-    {% for post in ranked_posts %}
-      <li><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a> (Views: {{ post.views }})</li>
-    {% empty %}
-      <li>No posts yet.</li>
-      <li>Be the first to create a post and get to the top of the ranking!</li>
-    {% endfor %}
-  </ol>
-</div>
+<div class="container">
+  <div class="text-center">
+    <h1>Post List</h1>
+    <a class="btn btn-primary btn-lg mt-3 mb-3" href="{% url 'post_create' %}">Create a new post</a>
+  </div>
 
-<div class="post-section">
-  <h2>All Posts</h2>
-  <ul class="post-list">
-    {% for post in posts %}
-      <li><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></li>
-      {% if post.get_author_avatar_url %}
-                <img src="{{ post.get_author_avatar_url }}" alt="アバター">
-            <h3>{{ post.author.username }}</h3>
-            % if post.icon %}
-            <img src="{{ post.icon.url }}" alt="アイコン">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="post-section">
+        <h2>Post Ranking</h2>
+        <ol class="ranking-list">
+          {% for post in ranked_posts %}
+            <li><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a> (Views: {{ post.views }})</li>
+          {% empty %}
+            <li>No posts yet.</li>
+            <li>Be the first to create a post and get to the top of the ranking!</li>
+          {% endfor %}
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  {% if page_obj %}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      {% for post in page_obj %}
+        <div class="col">
+          <div class="card">
+            {% if post.get_author_avatar_url %}
+              <img src="{{ post.get_author_avatar_url }}" class="card-img-top" alt="Avatar">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title"><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
+              <p class="card-text">{{ post.content }}</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-muted">Author: {{ post.author.username }}</small>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <p>No posts yet.</p>
+      {% endfor %}
+    </div>
+
+    {% if page_obj.has_other_pages %}
+      <div class="pagination">
+        {% if page_obj.has_previous %}
+          <a class="btn btn-secondary" href="?page=1">&laquo; First</a>
+          <a class="btn btn-secondary" href="?page={{ page_obj.previous_page_number }}">Previous</a>
         {% endif %}
-        <a href="{% url 'profile' username=post.author.username %}">投稿者のプロフィールへ</a>
-    {% empty %}
-      <li>No posts yet.</li>
-    {% endfor %}
-  </ul>
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <a class="btn btn-primary active" href="?page={{ num }}">{{ num }}</a>
+          {% else %}
+            <a class="btn btn-primary" href="?page={{ num }}">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <a class="btn btn-secondary" href="?page={{ page_obj.next_page_number }}">Next</a>
+          <a class="btn btn-secondary" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% else %}
+    <p>No posts yet.</p>
+  {% endif %}
 </div>
 {% endblock %}
-
-{% for post in posts %}
-    <div class="post">
-        <div class="author-info">
-            {% if post.get_author_avatar_url %}
-                <img src="{{ post.get_author_avatar_url }}" alt="アバター">
-            {% endif %}
-            <h3>{{ post.author.username }}</h3>
-        </div>
-        <h2>{{ post.title }}</h2>
-        <p>{{ post.content }}</p>
-        {% if post.icon %}
-            <img src="{{ post.icon.url }}" alt="アイコン">
-        {% endif %}
-        <a href="{% url 'profile' post.author.username %}">投稿者のプロフィールへ</a>
-    </div>
-{% endfor %}

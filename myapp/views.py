@@ -14,6 +14,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic import CreateView
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 
 
@@ -23,6 +24,15 @@ from django.contrib.auth.decorators import login_required
 def post_list(request):
     posts = Post.objects.all()
     ranked_posts = Post.objects.annotate(num_views=F('views') + 1).order_by('-num_views')[:5]
+
+    paginator = Paginator(posts, 9)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    if page_number is None or int(page_number) == 1:
+        show_ranking = True
+    else:
+        show_ranking = False
 
     # コメントのフォームの処理
     if request.method == 'POST':
@@ -35,7 +45,7 @@ def post_list(request):
     else:
         form = CommentForm()
 
-    return render(request, 'myapp/post_list.html', {'posts': posts, 'ranked_posts': ranked_posts, 'form': form})
+    return render(request, 'myapp/post_list.html', {'posts': posts, 'ranked_posts': ranked_posts, 'page_obj': page_obj, 'form': form})
 
 def post_create(request):
     if request.method == 'POST':
