@@ -9,7 +9,7 @@
     <!-- <script src="path/to/your/javascript/file.js"></script> -->
   </head>
   <body>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
         <div class="container">
           <h3 class="navbar-brand">Portfolio 掲示板</h3>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,7 +30,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'profile' user.username %}">Edit Profile</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item ms-3">
                 <form method="post" action="{% url 'logout' %}">
                   {% csrf_token %}
                     <button type="submit">Log out</button>
