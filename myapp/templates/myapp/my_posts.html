@@ -1,14 +1,60 @@
+<!-- my_posts.html -->
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>My Posts</h1>
-  {% if user_posts %}
-    <ul>
-    {% for post in user_posts %}
-      <li><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></li>
-    {% endfor %}
-    </ul>
-  {% else %}
-    <p>You haven't created any posts yet.</p>
-  {% endif %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h1 class="text-center">My Posts</h1>
+      {% if user_posts %}
+        <ul class="list-group">
+          {% for post in user_posts %}
+            <li class="list-group-item">
+              <a href="{% url 'post_detail' post.id %}" class="h5">{{ post.title }}</a>
+              <p class="text-muted">{{ post.content|truncatechars:100 }}</p>
+            </li>
+            {% if forloop.counter == 10 and user_posts.has_next %}
+              </ul>
+              <nav aria-label="Post navigation">
+                <ul class="pagination justify-content-center">
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ user_posts.next_page_number }}">&raquo;</a>
+                  </li>
+                </ul>
+              </nav>
+              <ul class="list-group">
+            {% endif %}
+          {% endfor %}
+        </ul>
+        {% if user_posts.has_other_pages and user_posts.paginator.num_pages > 1 %}
+          <nav aria-label="Post navigation">
+            <ul class="pagination justify-content-center">
+              {% if user_posts.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?page=1">&laquo;</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ user_posts.previous_page_number }}">{{ user_posts.previous_page_number }}</a>
+                </li>
+              {% endif %}
+              <li class="page-item active">
+                <a class="page-link" href="?page={{ user_posts.number }}">{{ user_posts.number }}</a>
+              </li>
+              {% if user_posts.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ user_posts.next_page_number }}">{{ user_posts.next_page_number }}</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ user_posts.paginator.num_pages }}">&raquo;</a>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+        {% endif %}
+      {% else %}
+        <p class="text-center">You haven't created any posts yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
 {% endblock %}

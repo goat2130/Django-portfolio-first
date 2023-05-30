@@ -70,9 +70,16 @@ def post_delete(request, pk):
     return redirect('post_list')
 
 def my_posts(request):
-    user_posts = Post.objects.filter(author=request.user)
-    return render(request, 'myapp/my_posts.html', {'user_posts': user_posts})
+    user = request.user
+    print(user)
+    posts = Post.objects.filter(author=user).order_by('-id')
+    paginator = Paginator(posts, 9)
+    page_number = request.GET.get('page')
+    user_posts = paginator.get_page(page_number)
 
+    ranked_posts = Post.objects.order_by('-views')[:10]
+
+    return render(request, 'myapp/my_posts.html', {'user_posts': user_posts, 'ranked_posts': ranked_posts})
 
 
 # login_required
