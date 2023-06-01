@@ -1,5 +1,7 @@
 from django.contrib import admin
+from django.conf import settings
 from django.urls import path, include
+from django.conf.urls.static import static
 from django.views.generic import RedirectView
 from django.contrib.auth.views import LoginView
 from myapp.views import SignUpView, profile, increment_views, ranking, my_posts, follow, unfollow, followers
@@ -18,3 +20,6 @@ urlpatterns = [
     path('unfollow/<str:username>/', unfollow, name='unfollow'),
     path('followers/<str:username>/', followers, name='followers'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

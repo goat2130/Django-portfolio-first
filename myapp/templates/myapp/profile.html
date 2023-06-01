@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+
 
 {% block content %}
 <div class="container">
@@ -10,8 +12,10 @@
       {% endif %}
       <div class="card mb-3">
         {% if profile.avatar %}
-          <img src="{{ profile.avatar.url }}" class="card-img-top" alt="{{ profile.user.username }}">
-        {% endif %}
+          <img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}" class="img-fluid mb-3">
+        {% else %}
+          <img src="{% static 'images/default_avatar.png' %}" alt="{{ profile.user.username }}" class="img-fluid mb-3">
+        a{% endif %}
         <div class="card-body">
           <h3 class="card-title">Introduction</h3>
           <p class="card-text">{{ profile.bio }}</p>
