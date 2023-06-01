@@ -8,8 +8,8 @@
     <a class="btn btn-primary btn-lg mt-3 mb-3" href="{% url 'post_create' %}">Create a new post</a>
   </div>
 
-  <div class="row">
-    <div class="col-md-12">
+  <div class="row justify-content-center">
+    <div class="col-md-2">
       <div class="post-section mt-3 mb-3">
         <h2>Post Ranking</h2>
         <ol class="ranking-list">
@@ -25,50 +25,60 @@
   </div>
 
   {% if page_obj %}
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-      {% for post in page_obj %}
-        <div class="col">
-          <div class="card">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for post in page_obj %}
+      <div class="col">
+        <div class="card">
+          <div class="d-flex align-items-center">
             {% if post.get_author_avatar_url %}
-              <img src="{{ post.get_author_avatar_url }}" class="card-img-top" alt="Avatar">
+              <img src="{{ post.get_author_avatar_url }}" class="card-img-left img-thumbnail" alt="Avatar" style="width: 100px; height: 100px;">
+            {% else %}
+              <img src="{% static 'images/default_avatar.png' %}" class="card-img-left img-thumbnail" alt="Avatar" style="width: 100px; height: 100px;">
             {% endif %}
             <div class="card-body">
               <h5 class="card-title"><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
-              <p class="card-text">{{ post.content }}</p>
-            </div>
-            <div class="card-footer">
-              <small class="text-muted">Author: {{ post.author.username }}</small>
+              <p class="card-text">
+                {% if post.content|length > 30 %}
+                  {{ post.content|slice:":30" }}...
+                {% else %}
+                  {{ post.content }}
+                {% endif %}
+              </p>
             </div>
           </div>
+          <div class="card-footer">
+            <small class="text-muted">Author: <a href="{% url 'profile' post.author.username %}">{{ post.author.username }}</a></small>
+          </div>
         </div>
-      {% empty %}
-        <p>No posts yet.</p>
-      {% endfor %}
-    </div>
-
-    {% if page_obj.has_other_pages %}
-      <div class="pagination">
-        {% if page_obj.has_previous %}
-          <a class="btn btn-secondary" href="?page=1">&laquo; First</a>
-          <a class="btn btn-secondary" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-        {% endif %}
-
-        {% for num in page_obj.paginator.page_range %}
-          {% if page_obj.number == num %}
-            <a class="btn btn-primary active" href="?page={{ num }}">{{ num }}</a>
-          {% else %}
-            <a class="btn btn-primary" href="?page={{ num }}">{{ num }}</a>
-          {% endif %}
-        {% endfor %}
-
-        {% if page_obj.has_next %}
-          <a class="btn btn-secondary" href="?page={{ page_obj.next_page_number }}">Next</a>
-          <a class="btn btn-secondary" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
-        {% endif %}
       </div>
-    {% endif %}
+    {% empty %}
+      <p>No posts yet.</p>
+    {% endfor %}
+  </div>
   {% else %}
     <p>No posts yet.</p>
+  {% endif %}
+
+  {% if page_obj.has_other_pages %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <a class="btn btn-secondary" href="?page=1">&laquo; First</a>
+        <a class="btn btn-secondary" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-primary active" href="?page={{ num }}">{{ num }}</a>
+        {% else %}
+          <a class="btn btn-primary" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="btn btn-secondary" href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a class="btn btn-secondary" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+      {% endif %}
+    </div>
   {% endif %}
 </div>
 {% endblock %}

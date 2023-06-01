@@ -14,8 +14,9 @@
             <p>Posted by <a href="{% url 'profile' username=post.author %}">{{ post.author }}</a> on {{ post.created_at }}</p>
             {% if user.is_authenticated and user == post.author %}
               <div class="text-right">
-                <a href="{% url 'post_edit' post.pk %}" class="btn btn-sm btn-primary">Edit</a>
-                <a href="{% url 'post_delete' post.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                <a href="{% url 'post_edit' post.pk %}" class="btn btn-primary btn-sm">Edit</a>
+                <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                <p> </p>
               </div>
             {% endif %}
 
