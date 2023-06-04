@@ -2,7 +2,7 @@
 
 :root {
   --primary: #0d6efd;
-  --dark: #21252f;
+  --white: #ffffff;
   --body: #888;
 }
 
@@ -13,12 +13,12 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: var(--dark);
+  color: var(--white);
   font-weight: 700;
 }
 
 a {
-  color: var(--dark);
+  color: var(--white);
   text-decoration: none;
 }
 
@@ -38,3 +38,4 @@ a {
 .card {
   margin-bottom: 20px;
 }
+

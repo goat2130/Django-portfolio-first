@@ -9,7 +9,7 @@
       {% if user_posts %}
         <ul class="list-group">
           {% for post in user_posts %}
-            <li class="list-group-item">
+            <li class="list-group-item text-white bg-dark border border-light">
               <a href="{% url 'post_detail' post.id %}" class="h5">{{ post.title }}</a>
               <p class="text-muted">{{ post.content|truncatechars:100 }}</p>
             </li>
@@ -52,7 +52,7 @@
           </nav>
         {% endif %}
       {% else %}
-        <p class="text-center">You haven't created any posts yet.</p>
+        <p class="text-center text-white">You haven't created any posts yet.</p>
       {% endif %}
     </div>
   </div>

@@ -5,16 +5,16 @@
 <div class="container">
   <div class="text-center">
     <h1>Post List</h1>
-    <a class="btn btn-primary btn-lg mt-3 mb-3" href="{% url 'post_create' %}">Create a new post</a>
+    <a class="btn btn-primary btn-lg mt-3 mb-3 border border-light" href="{% url 'post_create' %}">Create a new post</a>
   </div>
 
   <div class="row justify-content-center">
-    <div class="col-md-2">
+    <div class="col-md-4 bg-dark border border-warning mb-4">
       <div class="post-section mt-3 mb-3">
-        <h2>Post Ranking</h2>
-        <ol class="ranking-list">
+        <h2 class="text-center">Post Ranking</h2>
+        <ol class="ranking-list bg-dark">
           {% for post in ranked_posts %}
-            <li><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a> (Views: {{ post.views }})</li>
+            <li><a href="{% url 'post_detail' post.pk %}" class="text-white">{{ post.title }}</a> (Views: {{ post.views }})<a href="{% url 'profile' post.author.username %}">【投稿者：{{ post.author }}】</a></li>
           {% empty %}
             <li>No posts yet.</li>
             <li>Be the first to create a post and get to the top of the ranking!</li>
@@ -24,11 +24,12 @@
     </div>
   </div>
 
+
   {% if page_obj %}
   <div class="row row-cols-1 row-cols-md-3 g-4">
     {% for post in page_obj %}
       <div class="col">
-        <div class="card">
+        <div class="card bg-dark border border-light">
           <div class="d-flex align-items-center">
             {% if post.get_author_avatar_url %}
               <img src="{{ post.get_author_avatar_url }}" class="card-img-left img-thumbnail" alt="Avatar" style="width: 100px; height: 100px;">
@@ -37,7 +38,7 @@
             {% endif %}
             <div class="card-body">
               <h5 class="card-title"><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
-              <p class="card-text">
+              <p class="card-text text-white">
                 {% if post.content|length > 30 %}
                   {{ post.content|slice:":30" }}...
                 {% else %}
@@ -46,8 +47,8 @@
               </p>
             </div>
           </div>
-          <div class="card-footer">
-            <small class="text-muted">Author: <a href="{% url 'profile' post.author.username %}">{{ post.author.username }}</a></small>
+          <div class="card-footer border border-light">
+            <small class="text-muted">Author: <a href="{% url 'profile' post.author.username %}" class="text-white">{{ post.author.username }}</a></small>
           </div>
         </div>
       </div>

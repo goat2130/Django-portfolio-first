@@ -5,17 +5,17 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-8">
-        <div class="card my-4">
+        <div class="card my-4 bg-dark border border-light">
           <div class="card-body">
             <h1 class="text-center">{{ post.title }}</h1>
-            <div class="post-content border border-primary">
+            <div class="post-content border border-light">
               <p>{{ post.content }}</p>
             </div>
             <p>Posted by <a href="{% url 'profile' username=post.author %}">{{ post.author }}</a> on {{ post.created_at }}</p>
             {% if user.is_authenticated and user == post.author %}
-              <div class="text-right">
-                <a href="{% url 'post_edit' post.pk %}" class="btn btn-primary btn-sm">Edit</a>
-                <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger btn-sm">Delete</a>
+              <div>
+                <a href="{% url 'post_edit' post.pk %}" class="btn btn-primary btn-sm border border-light">Edit</a>
+                <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger btn-sm border border-light">Delete</a>
                 <p> </p>
               </div>
             {% endif %}
@@ -35,7 +35,7 @@
             <div class="comments">
               <h2>Comments</h2>
               {% for comment in comments %}
-                <div class="comment border border-secondary rounded">
+                <div class="comment border border-secondary rounded text-white">
                   <p class="info">
                     {{ comment.author }}
                     <span class="date">{{ comment.created_date }}</span>
@@ -55,7 +55,7 @@
             <p>{{ post.text|linebreaks }}</p>
 
             {% if user.is_authenticated %}
-              <div class="card my-4">
+              <div class="card my-4 bg-dark border border-light">
                 <h5 class="card-header">Add Comment</h5>
                 <div class="card-body">
                   <form method="POST" class="comment-form" action="{% url 'add_comment_to_post' pk=post.pk %}">

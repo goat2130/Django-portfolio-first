@@ -12,19 +12,19 @@
     {% else %}
       <img src="{% static 'images/default_avatar.png' %}" alt="{{ profile.user.username }}" class="img-thumbnail mb-3" style="display: block; margin: 0 auto; max-width: 100%; height: auto; width: 200px; height: 200px;">
     {% endif %}
-      <div class="card mb-3">
+      <div class="card mb-3 bg-dark border border-light">
         <div class="card-body">
           <h3 class="card-title">Introduction</h3>
           <p class="card-text">{{ profile.bio }}</p>
         </div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">
+          <li class="list-group-item bg-dark border border-light">
             <h3 class="card-title">Location</h3>
-            <p class="card-text">{{ profile.location }}</p>
+            <p class="card-text text-white">{{ profile.location }}</p>
           </li>
-          <li class="list-group-item">
+          <li class="list-group-item bg-dark">
             <h3 class="card-title">Website</h3>
-            <p class="card-text">{{ profile.website }}</p>
+            <p class="card-text text-white">{{ profile.website }}</p>
           </li>
         </ul>
         <div class="card-body">
@@ -37,7 +37,7 @@
       {% if request.user.is_authenticated %}
         {% if request.user == profile.user %}
           <h2 class="text-center">Edit Profile</h2>
-          <form method="POST" enctype="multipart/form-data" class="text-center">
+          <form method="POST" enctype="multipart/form-data" class="text-center bg-dark">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="btn btn-primary">Save Changes</button>
