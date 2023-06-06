@@ -3,6 +3,8 @@ from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.contrib.auth import get_user_model
+from django.http import HttpRequest
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
@@ -31,9 +33,12 @@ class Post(models.Model):
 
 
 
+
+
+
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    author = models.CharField(max_length=200)
+    post = models.ForeignKey('myapp.Post', on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, default=None)
     text = models.TextField()
     created_date = models.DateTimeField(default=timezone.now)
     approved_comment = models.BooleanField(default=False)
@@ -41,6 +46,31 @@ class Comment(models.Model):
     def approve(self):
         self.approved_comment = True
         self.save()
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.author_id:
+            # 新しいコメントで、まだauthorが設定されていない場合
+            self.author = self._get_current_user()
+        super().save(*args, **kwargs)
+
+    def _get_current_user(self):
+        from django.contrib.auth.models import AnonymousUser
+        from django.contrib.sessions.middleware import SessionMiddleware
+        from django.contrib.auth.middleware import AuthenticationMiddleware
+
+    # ダミーリクエストオブジェクトを作成し、セッションと認証情報を設定します
+        request = HttpRequest()
+        SessionMiddleware().process_request(request)
+        AuthenticationMiddleware().process_request(request)
+        request.session.save()
+
+    # リクエストから現在のユーザーを取得します
+        user = request.user
+
+        if user.is_authenticated:
+            return user
+        else:
+            return AnonymousUser()
 
     def __str__(self):
         return self.text
