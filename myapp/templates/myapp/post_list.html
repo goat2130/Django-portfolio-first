@@ -4,14 +4,18 @@
 {% block content %}
 <div class="container">
   <div class="text-center">
-    <h1>Post List</h1>
-    <a class="btn btn-primary btn-lg mt-3 mb-3 border border-light" href="{% url 'post_create' %}">Create a new post</a>
+    <h1>投稿一覧</h1>
+    {% if user.is_authenticated %}
+      <a class="btn btn-primary btn-lg mt-3 mb-3 border border-light" href="{% url 'post_create' %}">新しい投稿はこちらから</a>
+    {% else %}
+      <p class="btn btn-dark text-white-50 btn-lg mt-3 mb-3 border border-light">ログインすると機能が使えます</p>
+    {% endif %}
   </div>
 
   <div class="row justify-content-center">
     <div class="col-md-4 bg-dark border border-warning mb-4">
       <div class="post-section mt-3 mb-3">
-        <h2 class="text-center">Post Ranking</h2>
+        <h2 class="text-center">ランキング一覧</h2>
         <ol class="ranking-list bg-dark">
           {% for post in ranked_posts %}
             <li><a href="{% url 'post_detail' post.pk %}" class="text-white">{{ post.title }}</a> (Views: {{ post.views }})<a href="{% url 'profile' post.author.username %}">【投稿者：{{ post.author }}】</a></li>
@@ -23,7 +27,6 @@
       </div>
     </div>
   </div>
-
 
   {% if page_obj %}
   <div class="row row-cols-1 row-cols-md-3 g-4">

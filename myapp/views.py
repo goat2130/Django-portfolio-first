@@ -163,6 +163,7 @@ def add_comment_to_post(request, pk):
             comment = form.save(commit=False)
             comment.post = post
             comment.created_date = timezone.now() # 現在の日時をセットする
+            comment.author_id = request.user.id  # ログインしているユーザーを自動的に設定
             comment.save()
             return redirect(reverse('post_detail', kwargs={'pk': post.pk}))
     else:

@@ -11,7 +11,7 @@
             <div class="post-content border border-light">
               <p>{{ post.content }}</p>
             </div>
-            <p>Posted by <a href="{% url 'profile' username=post.author %}">{{ post.author }}</a> on {{ post.created_at }}</p>
+            <p>投稿主： <a href="{% url 'profile' username=post.author %}">{{ post.author }}</a> 投稿日： {{ post.created_at }}</p>
             {% if user.is_authenticated and user == post.author %}
               <div>
                 <a href="{% url 'post_edit' post.pk %}" class="btn btn-primary btn-sm border border-light">Edit</a>
@@ -20,20 +20,24 @@
               </div>
             {% endif %}
 
-            <form method="POST" action="{% url 'post_like' post.pk %}">
-              {% csrf_token %}
-              {% if request.user in post.likes.all %}
-                <button type="submit" class="btn btn-sm btn-danger">Unlike</button>
-              {% else %}
-                <button type="submit" class="btn btn-sm btn-outline-primary">Like</button>
-              {% endif %}
-            </form>
+            {% if user.is_authenticated %}
+              <form method="POST" action="{% url 'post_like' post.pk %}">
+                {% csrf_token %}
+                {% if request.user in post.likes.all %}
+                  <button type="submit" class="btn btn-sm btn-danger">Unlike</button>
+                {% else %}
+                  <button type="submit" class="btn btn-sm btn-outline-primary">Like</button>
+                {% endif %}
+              </form>
+            {% else %}
+              <p>ログインしたら機能を使えます</p>
+            {% endif %}
             <p>{{ post.likes.count }} likes</p>
 
             <hr>
 
             <div class="comments">
-              <h2>Comments</h2>
+              <h2>コメント</h2>
               {% for comment in comments %}
                 <div class="comment border border-secondary rounded text-white">
                   <p class="info">
@@ -47,7 +51,7 @@
                   {% endif %}
                 </div>
               {% empty %}
-                <p>No comments yet.</p>
+                <p>まだコメントはありません。</p>
               {% endfor %}
             </div>
 
@@ -55,16 +59,16 @@
             <p>{{ post.text|linebreaks }}</p>
 
             {% if user.is_authenticated %}
-          <div style="display: flex; justify-content: center; align-items: center; height: 70vh;">
-            <div style="text-align: center; width: 80%;">
-              <h1>Add Comment 編集!</h1>
-              <form method="POST" class="comment-form bg-dark" action="{% url 'add_comment_to_post' pk=post.pk %}">
-                  {% csrf_token %}
-                  {{ form.as_p }}
-                  <button type="submit" class="btn btn-primary">Submit</button>
-              </form>
-            </div>
-          </div>
+              <div style="display: flex; justify-content: center; align-items: center; height: 70vh;">
+                <div style="text-align: center; width: 80%;">
+                  <h2>コメントを残す</h2>
+                  <form method="POST" class="comment-form bg-dark" action="{% url 'add_comment_to_post' pk=post.pk %}">
+                      {% csrf_token %}
+                      {{ form.as_p }}
+                      <button type="submit" class="btn btn-primary">送信</button>
+                  </form>
+                </div>
+              </div>
             {% endif %}
           </div>
         </div>

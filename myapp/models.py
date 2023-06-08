@@ -35,7 +35,6 @@ class Post(models.Model):
 
 
 
-
 class Comment(models.Model):
     post = models.ForeignKey('myapp.Post', on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, default=None)
@@ -56,15 +55,14 @@ class Comment(models.Model):
     def _get_current_user(self):
         from django.contrib.auth.models import AnonymousUser
         from django.contrib.sessions.middleware import SessionMiddleware
-        from django.contrib.auth.middleware import AuthenticationMiddleware
+        from django.contrib.auth.middleware import get_user
 
-    # ダミーリクエストオブジェクトを作成し、セッションと認証情報を設定します
+        # ダミーリクエストオブジェクトを作成し、セッションと認証情報を設定します
         request = HttpRequest()
         SessionMiddleware().process_request(request)
-        AuthenticationMiddleware().process_request(request)
         request.session.save()
 
-    # リクエストから現在のユーザーを取得します
+        # リクエストから現在のユーザーを取得します
         user = request.user
 
         if user.is_authenticated:

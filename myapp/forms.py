@@ -22,7 +22,7 @@ class SignUpForm(UserCreationForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('author', 'text', 'created_date', 'approved_comment')
+        fields = ('text', 'created_date', 'approved_comment')
         widgets = {
             'text': forms.Textarea(attrs={'class': 'form-control'}),
         }

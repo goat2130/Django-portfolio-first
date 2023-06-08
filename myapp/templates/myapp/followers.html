@@ -12,15 +12,15 @@
               <div class="card-body">
                 <h5 class="card-title">{{ follower.user.username }}</h5>
                 <p class="card-text">{{ follower.user.profile.bio|truncatechars:100 }}</p>
-                <a href="{% url 'profile' username=follower.user.username %}" class="btn btn-primary">View Profile</a>
+                <a href="{% url 'profile' username=follower.user.username %}" class="btn btn-primary">プロフィールへ</a>
               </div>
             </div>
           {% empty %}
-            <p>No followers yet.</p>
+            <p>フォロワーはまだいません</p>
           {% endfor %}
         </div>
       {% else %}
-        <p>No followers yet.</p>
+        <p>フォロワーはまだいません</p>
       {% endif %}
     </div>
   </div>
