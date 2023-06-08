@@ -1,13 +1,19 @@
-# __Django-portfolio-first__
+# __~Django-portfolio-first~__
 ## portforio's idea 掲示板
 #### 未経験エンジニア転職を望む全てのユーザーが支え合える環境を
 
 ![サンプル画像](./<img width="1440" alt="スクリーンショット 2023-06-08 20 59 31" src="https://github.com/goat2130/Django-portfolio-first/assets/124475744/af8af353-cc8e-4624-99af-6e21309a7d51">
 )
 
-# 1.目次
+## 目次
 - [Demo](#Demo)
-
+- [Features](#Features)
+- [Usage](#Usage)
+- [Requirement](#Requirement)
+- [Installation](#Installation)
+- [Note](#Note)
+- [Autnor](#Author)
+- [License](#License)
 
  
 ## Demo
@@ -17,6 +23,16 @@
 # Features
  
 "hoge"のセールスポイントや差別化などを説明する
+
+# Usage
+ 
+DEMOの実行方法など、"hoge"の基本的な使い方を説明する
+ 
+```bash
+git clone https://github.com/hoge/~
+cd examples
+python demo.py
+```
  
 # Requirement
  
@@ -31,16 +47,6 @@ Requirementで列挙したライブラリなどのインストール方法を説
  
 ```bash
 pip install huga_package
-```
- 
-# Usage
- 
-DEMOの実行方法など、"hoge"の基本的な使い方を説明する
- 
-```bash
-git clone https://github.com/hoge/~
-cd examples
-python demo.py
 ```
  
 # Note
