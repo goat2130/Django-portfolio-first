@@ -1,5 +1,3 @@
 # __Django-portfolio-first__
 
-
-
-ポートフォリオ作成
+![サンプル画像１]()
