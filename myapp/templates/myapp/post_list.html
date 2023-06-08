@@ -20,8 +20,8 @@
           {% for post in ranked_posts %}
             <li><a href="{% url 'post_detail' post.pk %}" class="text-white">{{ post.title }}</a> (Views: {{ post.views }})<a href="{% url 'profile' post.author.username %}">【投稿者：{{ post.author }}】</a></li>
           {% empty %}
-            <li>No posts yet.</li>
-            <li>Be the first to create a post and get to the top of the ranking!</li>
+            <li>まだ投稿がありません</li>
+            <li>あなたが投稿をすることでトップランキングに乗ることができます！</li>
           {% endfor %}
         </ol>
       </div>
@@ -37,7 +37,7 @@
             {% if post.get_author_avatar_url %}
               <img src="{{ post.get_author_avatar_url }}" class="card-img-left img-thumbnail" alt="Avatar" style="width: 100px; height: 100px;">
             {% else %}
-              <img src="{% static 'images/default_avatar.png' %}" class="card-img-left img-thumbnail" alt="Avatar" style="width: 100px; height: 100px;">
+              <img src="{% static 'images/new_default_avatar.png' %}" class="card-img-left img-thumbnail" alt="Avatar" style="width: 100px; height: 100px;">
             {% endif %}
             <div class="card-body">
               <h5 class="card-title"><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h5>
@@ -56,11 +56,11 @@
         </div>
       </div>
     {% empty %}
-      <p>No posts yet.</p>
+      <p class="text-white">投稿がまだありません</p>
     {% endfor %}
   </div>
   {% else %}
-    <p>No posts yet.</p>
+    <p class="text-white text-center">投稿がまだありません</p>
   {% endif %}
 
   {% if page_obj.has_other_pages %}

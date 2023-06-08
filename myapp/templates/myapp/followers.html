@@ -9,7 +9,7 @@
         <div class="card-deck">
           {% for follower in followers %}
             <div class="card mb-3">
-              <div class="card-body">
+              <div class="card-body bg-dark">
                 <h5 class="card-title">{{ follower.user.username }}</h5>
                 <p class="card-text">{{ follower.user.profile.bio|truncatechars:100 }}</p>
                 <a href="{% url 'profile' username=follower.user.username %}" class="btn btn-primary">プロフィールへ</a>

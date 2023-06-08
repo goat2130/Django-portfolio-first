@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card my-4 bg-dark border border-light">
+          <div class="card-body">
+            <h1 class="text-center">アカウント削除</h1>
+            <p>本当にアカウントを削除しますか？この操作は取り消すことができません。</p>
+            <form method="POST" action="{% url 'delete_account' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">アカウントを削除</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

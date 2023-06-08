@@ -1,16 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block content %}
-<div class="container">
+<div class="container justify-content-center">
   <div class="row justify-content-center">
     <div class="col-md-6">
       <h1 class="text-center">{{ profile.user.username }}'s Profile</h1>
       {% if profile.avatar %}
       <img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}" class="img-thumbnail" style="display: block; margin: 0 auto; max-width: 100%; height: auto; width: 200px; height: 200px;">
     {% else %}
-      <img src="{% static 'images/default_avatar.png' %}" alt="{{ profile.user.username }}" class="img-thumbnail mb-3" style="display: block; margin: 0 auto; max-width: 100%; height: auto; width: 200px; height: 200px;">
+      <img src="{% static 'images/new_default_avatar.png' %}" alt="{{ profile.user.username }}" class="img-thumbnail mb-3" style="display: block; margin: 0 auto; max-width: 100%; height: auto; width: 200px; height: 200px;">
     {% endif %}
       <div class="card mb-3 bg-dark border border-light">
         <div class="card-body">
@@ -57,6 +56,11 @@
         {% endif %}
       {% else %}
         <p class="text-center">このユーザーをフォローするにはログインする必要があります</p>
+      {% endif %}
+      {% if user.is_authenticated and user == profile.user %}
+        <div class="text-center">
+          <a href="{% url 'delete_account' %}" class="btn btn-danger" onclick="return confirm('削除したアカウントは元に戻りません。本当に削除しますか？')">アカウントを削除</a>
+        </div>
       {% endif %}
     </div>
   </div>

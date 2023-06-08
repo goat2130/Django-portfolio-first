@@ -31,6 +31,18 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(max_length=500, blank=True)
+    website = models.URLField(max_length=200, blank=True)
+    location = models.CharField(max_length=100, blank=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    followers = models.ManyToManyField(User, related_name='following', blank=True)
+    followers_count = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.user.username
+
 
 
 
@@ -72,29 +84,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(max_length=500, blank=True)
-    website = models.URLField(max_length=200, blank=True)
-    location = models.CharField(max_length=100, blank=True)
-    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
-    followers = models.ManyToManyField(User, related_name='following', blank=True)
-    followers_count = models.PositiveIntegerField(default=0)
-
-    def __str__(self):
-        return self.user.username
-
-
-
-#class Connection(models.Model):
-#    user = models.OneToOneField(User, on_delete=models.CASCADE)
-#    following = models.ManyToManyField(User, related_name='following', blank=True)
-
-#   def __str__(self):
-#        return self.user.username
-
 
 
 class PostViews(models.Model):

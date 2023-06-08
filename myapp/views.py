@@ -6,7 +6,7 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy, reverse
 from django.views import generic
-from django.contrib.auth import login
+from django.contrib.auth import login, get_user_model
 from django.utils import timezone
 from django_comments.models import Comment
 from django.db.models import F, Count
@@ -15,6 +15,7 @@ from django.views.generic import CreateView
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+
 
 
 
@@ -60,9 +61,7 @@ def post_create(request):
     return render(request, 'myapp/post_form.html', {'form': form})
 
 
-# def post_detail(request, pk):
-#    post = get_object_or_404(Post, pk=pk)
-#    return render(request, 'myapp/post_detail.html', {'post': post})
+
 
 def post_delete(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -171,7 +170,7 @@ def add_comment_to_post(request, pk):
     return render(request, 'myapp/add_comment_to_post.html', {'form': form, 'post': post})
 
 # profile_function
-from django.contrib.auth.decorators import login_required
+
 
 @login_required
 def profile(request, username):
@@ -292,3 +291,15 @@ def followers(request, username):
     followers = Connection.objects.filter(following=user)
     context = {'user': user, 'followers': followers}
     return render(request, 'myapp/followers.html', context)
+
+
+def delete_account(request):
+    user = request.user
+    user_posts = Post.objects.filter(author=user)
+    user_comments = Comment.objects.filter(user=user)
+    user_comments.delete()
+    user.followers.clear()
+    user.following.clear()
+    user.profile.delete()
+    user.delete()
+    return redirect('post_list')
