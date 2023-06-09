@@ -2,8 +2,8 @@
 ## portforio's idea 掲示板
 #### 未経験エンジニア転職を望む全てのユーザーが支え合える環境を
 
-![サンプル画像](./<img width="1440" alt="スクリーンショット 2023-06-08 20 59 31" src="https://github.com/goat2130/Django-portfolio-first/assets/124475744/af8af353-cc8e-4624-99af-6e21309a7d51">
-)
+<img width="1440" alt="スクリーンショット 2023-06-08 20 59 31" src="https://github.com/goat2130/Django-portfolio-first/assets/124475744/af8af353-cc8e-4624-99af-6e21309a7d51">
+
 
 ## 目次
 - [Demo](#Demo)
@@ -13,15 +13,14 @@
 - [Installation](#Installation)
 - [Note](#Note)
 - [Autnor](#Author)
-- [License](#License)
 
  
 ## Demo
  
-#### 私自身未経験エンジニア転職をする時、ポートフォリオで何を作るか非常に悩みました。
-#### 何も知らないからこそアイディアを思いつくのはとても苦労すると感じます。
-#### 未経験エンジニアがお互いに意見を出し合いより良い選択をできるようこのアプリケーションを作りました。
-#### あなたのお役に立てると嬉しいです！
+## 私自身未経験エンジニア転職をする時、ポートフォリオで何を作るか非常に悩みました。
+## 何も知らないからこそアイディアを思いつくのはとても苦労すると感じます。
+## 未経験エンジニアがお互いに意見を出し合いより良い選択をできるようこのアプリケーションを作りました。
+## あなたのお役に立てると嬉しいです！
  
 # Features
 ## 主な機能は以下の通りです。
@@ -35,44 +34,72 @@
 
 # Usage
  
-DEMOの実行方法など、"hoge"の基本的な使い方を説明する
- 
-```bash
-git clone https://github.com/hoge/~
-cd examples
-python demo.py
-```
+#### https://github.com/goat2130/Django-portfolio-first.git
+#### python manage.py runserver 0.0.0.0:8000 [runserverでサイトを立ち上げます]
  
 # Requirement
- 
-"hoge"を動かすのに必要なライブラリなどを列挙する
- 
-* huga 3.5.2
-* hogehuga 1.0.2
- 
+
+### *python 3.11.3
+### *Django 4.2
+### *pip 22.3.1
+
 # Installation
- 
-Requirementで列挙したライブラリなどのインストール方法を説明する
- 
-```bash
-pip install huga_package
-```
+
+### Docker を利用しました。以下Dockerfile と　Docker-compose.ymlです。
+
+"""
+FROM python:3
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+WORKDIR /code
+COPY requirements.txt /code/
+RUN pip install -r requirements.txt
+COPY . /code/
+"""
+
+"""
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    volumes:
+      - data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: mysite
+      MYSQL_USER: mysiteuser
+      MYSQL_PASSWORD: mysiteuserpass
+    restart: always
+
+  web:
+    build: .
+    command: sh -c "sleep 3; python3.6 manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/root/mysite
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  data:
+    driver: local
+
+"""
+
+
  
 # Note
  
-注意点などがあれば書く
+## viewsを記録する際、ページをリロードしてもカウントされること
+## アカウントの名前が上書きできないこと
  
 # Author
  
-作成情報を列挙する
+# * goat2130 
+# * 無所属
+# * goat2130@icloud.com
  
-* 作成者
-* 所属
-* E-mail
- 
-# License
-ライセンスを明示する
- 
-"hoge" is under [MIT license](https://en.wikipedia.org/wiki/MIT_License).
- 
-社内向けなら社外秘であることを明示してる
+
