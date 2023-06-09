@@ -39,6 +39,7 @@
 <img width="1440" alt="スクリーンショット 2023-06-08 19 42 48" src="https://github.com/goat2130/Django-portfolio-first/assets/124475744/b96cf28c-1137-40b5-959e-539296daefc7">
 
 #### ランキング機能
+<img width="1440" alt="スクリーンショット 2023-06-08 20 59 31" src="https://github.com/goat2130/Django-portfolio-first/assets/124475744/af8af353-cc8e-4624-99af-6e21309a7d51">
 
 # Usage
  
