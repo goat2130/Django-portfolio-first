@@ -29,6 +29,8 @@
 <img width="1440" alt="スクリーンショット 2023-06-08 19 42 13" src="https://github.com/goat2130/Django-portfolio-first/assets/124475744/9134b551-8264-4401-834f-d92f40d57bbe">
 
 #### ログイン、ログアウト機能
+<img width="1440" alt="スクリーンショット 2023-06-08 19 40 16" src="https://github.com/goat2130/Django-portfolio-first/assets/124475744/ce8c0c32-f928-49e0-a272-88c3aeb38bc4">
+
 #### フォロー機能
 #### コメント機能
 #### いいね機能
