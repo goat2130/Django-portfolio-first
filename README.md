@@ -1,6 +1,6 @@
 # __Django-portfolio-first__
 ## portforio's idea 掲示板
-#### 未経験エンジニア転職を望む全てのユーザーが支え合える環境を
+## __未経験エンジニア転職を望む全てのユーザーが支え合える環境を__
 
 <img width="1440" alt="スクリーンショット 2023-06-08 20 59 31" src="https://github.com/goat2130/Django-portfolio-first/assets/124475744/af8af353-cc8e-4624-99af-6e21309a7d51">
 
