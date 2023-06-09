@@ -32,11 +32,12 @@
 <img width="1440" alt="スクリーンショット 2023-06-08 19 40 16" src="https://github.com/goat2130/Django-portfolio-first/assets/124475744/ce8c0c32-f928-49e0-a272-88c3aeb38bc4">
 
 #### フォロー機能
+<img width="1440" alt="スクリーンショット 2023-06-08 20 00 42" src="https://github.com/goat2130/Django-portfolio-first/assets/124475744/227c583e-1384-4aa9-9b87-04908d928fb2">
+#### コメント機能
+
+#### いいね機能
 <img width="1440" alt="スクリーンショット 2023-06-08 19 42 48" src="https://github.com/goat2130/Django-portfolio-first/assets/124475744/b96cf28c-1137-40b5-959e-539296daefc7">
 
-#### コメント機能
-#### いいね機能
-<img width="1440" alt="スクリーンショット 2023-06-08 20 00 42" src="https://github.com/goat2130/Django-portfolio-first/assets/124475744/227c583e-1384-4aa9-9b87-04908d928fb2">
 #### ランキング機能
 
 # Usage
