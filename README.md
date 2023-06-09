@@ -31,9 +31,9 @@
 
 #### フォロー機能
 <img width="1440" alt="スクリーンショット 2023-06-08 20 00 42" src="https://github.com/goat2130/Django-portfolio-first/assets/124475744/227c583e-1384-4aa9-9b87-04908d928fb2">
+
 #### コメント機能
 <img width="1440" alt="スクリーンショット 2023-06-09 20 56 33" src="https://github.com/goat2130/Django-portfolio-first/assets/124475744/9a4233ee-26e0-4b9f-81e1-066ff3bed527">
-
 
 #### いいね機能
 <img width="1440" alt="スクリーンショット 2023-06-08 19 42 48" src="https://github.com/goat2130/Django-portfolio-first/assets/124475744/b96cf28c-1137-40b5-959e-539296daefc7">
