@@ -144,3 +144,6 @@ SITE_ID = 1
 
 # ログアウト後のリダイレクト画面を設定
 LOGOUT_REDIRECT_URL = 'post_list'
+
+# 403　csrf対策
+CSRF_TRUSTED_ORIGINS = ['https://portfolio-idea.com']
