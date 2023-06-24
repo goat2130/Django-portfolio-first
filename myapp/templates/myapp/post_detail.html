@@ -13,6 +13,11 @@
             </div>
             <p>投稿主： <a href="{% url 'profile' username=post.author %}">{{ post.author }}</a> 投稿日： {{ post.created_at }}</p>
             {% if user.is_authenticated and user == post.author %}
+
+            <div>
+              <p>経験: {{ post.author.profile.experience }}</p>
+            </div>
+
             <div>
               <a href="{% url 'post_edit' post.pk %}" class="btn btn-primary btn-sm border border-light">Edit</a>
               <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger btn-sm border border-light" onclick="return confirm('削除した投稿は元に戻りません。本当に削除しますか？')">Delete</a>

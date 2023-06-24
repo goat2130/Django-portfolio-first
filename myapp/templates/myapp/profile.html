@@ -11,26 +11,32 @@
     {% else %}
       <img src="{% static 'images/new_default_avatar.png' %}" alt="{{ profile.user.username }}" class="img-thumbnail mb-3" style="display: block; margin: 0 auto; max-width: 100%; height: auto; width: 200px; height: 200px;">
     {% endif %}
-      <div class="card mb-3 bg-dark border border-light">
-        <div class="card-body">
+    <div class="card mb-3 bg-dark border border-light">
+      <div class="card-body">
           <h3 class="card-title">紹介文</h3>
           <p class="card-text">{{ profile.bio }}</p>
-        </div>
-        <ul class="list-group list-group-flush">
+      </div>
+      <ul class="list-group list-group-flush">
           <li class="list-group-item bg-dark border border-light">
-            <h3 class="card-title">居場所</h3>
-            <p class="card-text text-white">{{ profile.location }}</p>
+              <h3 class="card-title">居場所</h3>
+              <p class="card-text text-white">{{ profile.location }}</p>
           </li>
           <li class="list-group-item bg-dark">
-            <h3 class="card-title">Website</h3>
-            <p class="card-text text-white">{{ profile.website }}</p>
+              <h3 class="card-title">Website</h3>
+              <p class="card-text text-white">{{ profile.website }}</p>
           </li>
-        </ul>
-        <div class="card-body">
+      </ul>
+      {% if profile.experience %}
+      <div class="card-body border border-light">
+          <h5 class="card-title">経験</h5>
+          <p class="card-text text-white">{{ profile.experience }}</p>
+      </div>
+      {% endif %}
+      <div class="card-body">
           <h5 class="card-title">Followers: {{ followers_count }}</h5>
           <a href="{% url 'followers' username=profile.user.username %}" class="card-link">View Followers</a>
-        </div>
       </div>
+  </div>
 
 
       {% if request.user.is_authenticated %}

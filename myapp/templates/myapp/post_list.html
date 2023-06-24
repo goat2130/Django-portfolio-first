@@ -50,8 +50,13 @@
               </p>
             </div>
           </div>
-          <div class="card-footer border border-light">
-            <small class="text-muted">Author: <a href="{% url 'profile' post.author.username %}" class="text-white">{{ post.author.username }}</a></small>
+          <div class="card-footer border border-light d-flex justify-content-between">
+            <div>
+                <small class="text-muted">Author: <a href="{% url 'profile' post.author.username %}" class="text-white">{{ post.author.username }}</a></small>
+            </div>
+            <div>
+                <p class="mb-0">経験: {{ post.author.profile.experience }}</p>
+            </div>
           </div>
         </div>
       </div>

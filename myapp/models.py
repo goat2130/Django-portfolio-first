@@ -32,6 +32,11 @@ class Post(models.Model):
         return self.title
 
 class Profile(models.Model):
+    EXPERIENCE_CHOICES = [
+        ('未経験', '未経験'),
+        ('経験者', '経験者'),
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
     website = models.URLField(max_length=200, blank=True)
@@ -39,6 +44,7 @@ class Profile(models.Model):
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     followers = models.ManyToManyField(User, related_name='following', blank=True)
     followers_count = models.PositiveIntegerField(default=0)
+    experience = models.CharField(max_length=10, choices=EXPERIENCE_CHOICES, default='未経験')
 
     def __str__(self):
         return self.user.username
