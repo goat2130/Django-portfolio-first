@@ -7,6 +7,12 @@
       <form method="post" class="bg-dark text-white p-3">
         {% csrf_token %}
         {{ form.as_p }}
+        <h3 class="text-center text-danger">[注意]</h3>
+        <p class="text-danger">例）ユーザー名: port</p>
+        <p class="text-danger">※ パスワード: port1234 <br>
+        ※ パスワード: 11111111 <br>
+        ※ パスワード: aaaaaa   等はご利用できません。<br>
+        ご了承くださいますようお願い申し上げます。</p>
         <button type="submit" class="btn btn-primary">Sign up</button>
       </form>
     </div>
