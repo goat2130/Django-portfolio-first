@@ -18,7 +18,7 @@
         <h2 class="text-center">ランキング一覧</h2>
         <ol class="ranking-list bg-dark">
           {% for post in ranked_posts %}
-            <li><a href="{% url 'post_detail' post.pk %}" class="text-white">{{ post.title }}</a> (Views: {{ post.views }})<a href="{% url 'profile' post.author.username %}">【投稿者：{{ post.author }}】</a></li>
+            <li><a href="{% url 'post_detail' post.pk %}" class="text-white">{{ post.title }}</a><br> (Views: {{ post.views }})<a href="{% url 'profile' post.author.username %}">【投稿者：{{ post.author }}】【経験: {{ post.author.profile.experience }}】</a></li>
           {% empty %}
             <li>まだ投稿がありません</li>
             <li>あなたが投稿をすることでトップランキングに乗ることができます！</li>
