@@ -47,9 +47,15 @@
 
 # Requirement
 
-### *python 3.11.3
-### *Django 4.2
-### *pip 22.3.1
+### asgiref==3.6.0
+### Django==4.2
+### django-contrib-comments==2.2.0
+### django-environ==0.10.0
+### gunicorn==20.1.0
+### Pillow==9.5.0
+### psycopg2==2.9.6
+### pytz==2023.3
+### sqlparse==0.4.4
 
 # Installation
 
