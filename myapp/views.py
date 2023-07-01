@@ -23,7 +23,7 @@ from django.core.paginator import Paginator
 
 # Post Function
 def post_list(request):
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by('-id')
     ranked_posts = Post.objects.annotate(num_views=F('views') + 1).order_by('-num_views')[:5]
 
     paginator = Paginator(posts, 9)
