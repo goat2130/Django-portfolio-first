@@ -6,20 +6,26 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.http import HttpRequest
 
+"""
+models.pyはデータベースとの連携を行います。検索、取得、追加、削除の一連の流れが行うことができます。
+urlsルーティングとview.pyから、データのリクエストを受け取りそのリクエストに沿ってデータの受け渡しをします。
+
+"""
 class Post(models.Model):
-    title = models.CharField(max_length=200)
-    content = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200) #２００文字まで取得
+    content = models.TextField() #長いテキストデータを取得
+    author = models.ForeignKey(User, on_delete=models.CASCADE) #userと紐付け、紐づけたuserが消えた場合には投稿も削除
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='likes', blank=True)
-    views = models.IntegerField(default=0)
-    icon = models.ImageField(upload_to='icons/', blank=True, null=True)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='likes', blank=True) # 多対多でデータを持つ
+    views = models.IntegerField(default=0) #閲覧数
+    icon = models.ImageField(upload_to='icons/', blank=True, null=True) #画像を取得、見れる
 
-    def get_rank(self):
-        rank = 0
+    def get_rank(self): #投稿ランキング機能
+        rank = 0 #初期化
+        # post一覧から現在の時刻より前の投稿を取得し、閲覧数の多い順と公開日の新しい物いから順位表示する
         posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-views', '-published_date')
-        for i, post in enumerate(posts):
+        for i, post in enumerate(posts): #enumerateを使ってindex,postを取得。ランク変数にindexを１ずつ増やして格納
             if post == self:
                 rank = i + 1
                 break
@@ -37,9 +43,9 @@ class Profile(models.Model):
         ('経験者', '経験者'),
     ]
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE) #1対１でデータを持つ
     bio = models.TextField(max_length=500, blank=True)
-    website = models.URLField(max_length=200, blank=True)
+    website = models.URLField(max_length=200, blank=True) #"url型でデータを保持"
     location = models.CharField(max_length=100, blank=True)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     followers = models.ManyToManyField(User, related_name='following', blank=True)

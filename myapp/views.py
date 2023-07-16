@@ -169,12 +169,10 @@ def add_comment_to_post(request, pk):
         form = CommentForm()
     return render(request, 'myapp/add_comment_to_post.html', {'form': form, 'post': post})
 
-# profile_function
-
 
 @login_required
 def profile(request, username):
-    profile_user = get_object_or_404(User, username=username)
+    profile_user = get_object_or_404(User, username=username) #userモデルから取得。いない場合は４０４を表示
     try:
         profile = Profile.objects.get(user=profile_user)
     except Profile.DoesNotExist:
