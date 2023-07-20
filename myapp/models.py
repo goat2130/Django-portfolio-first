@@ -9,6 +9,7 @@ from django.http import HttpRequest
 """
 models.pyはデータベースとの連携を行います。検索、取得、追加、削除の一連の流れが行うことができます。
 urlsルーティングとview.pyから、データのリクエストを受け取りそのリクエストに沿ってデータの受け渡しをします。
+またDjangoでは、モデルを使うことでSQL文を使わないでデータベース操作を可能とします
 
 """
 class Post(models.Model):
@@ -44,13 +45,13 @@ class Profile(models.Model):
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE) #1対１でデータを持つ
-    bio = models.TextField(max_length=500, blank=True)
+    bio = models.TextField(max_length=500, blank=True) #長いテキストデータを取得
     website = models.URLField(max_length=200, blank=True) #"url型でデータを保持"
-    location = models.CharField(max_length=100, blank=True)
-    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
-    followers = models.ManyToManyField(User, related_name='following', blank=True)
-    followers_count = models.PositiveIntegerField(default=0)
-    experience = models.CharField(max_length=10, choices=EXPERIENCE_CHOICES, default='未経験')
+    location = models.CharField(max_length=100, blank=True)# 文字データを取得
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)# 画像データを取得、リンクはavatars/
+    followers = models.ManyToManyField(User, related_name='following', blank=True)# 多対多のデータを持つ
+    followers_count = models.PositiveIntegerField(default=0)# 整数型で整数のみのデータを持つ
+    experience = models.CharField(max_length=10, choices=EXPERIENCE_CHOICES, default='未経験')# choicesから未経験か経験者かを選ぶことができる
 
     def __str__(self):
         return self.user.username
@@ -60,15 +61,15 @@ class Profile(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey('myapp.Post', on_delete=models.CASCADE, related_name='comments')
-    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, default=None)
-    text = models.TextField()
-    created_date = models.DateTimeField(default=timezone.now)
-    approved_comment = models.BooleanField(default=False)
+    post = models.ForeignKey('myapp.Post', on_delete=models.CASCADE, related_name='comments')# myapp.postに１対多の形でコメントのデータが持てるようにする
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, default=None)# custom user default user などの使用モデルを問わず、現在使用しているuserモデルを返す
+    text = models.TextField()# text date
+    created_date = models.DateTimeField(default=timezone.now)# コメントをした日時を自動で設定
+    approved_comment = models.BooleanField(default=False)# チェックを入れることでつまりTRUE
 
     def approve(self):
         self.approved_comment = True
-        self.save()
+        self.save() # True でコメントを保存
 
     def save(self, *args, **kwargs):
         if not self.pk and not self.author_id:
@@ -92,26 +93,26 @@ class Comment(models.Model):
         if user.is_authenticated:
             return user
         else:
-            return AnonymousUser()
+            return AnonymousUser()# ログインしていないと返す
 
     def __str__(self):
         return self.text
 
 
 class PostViews(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_views')
-    views_count = models.IntegerField(default=0)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_views')# post を１対他でもてるよう設定
+    views_count = models.IntegerField(default=0)# 閲覧数をカウントする。ランキング機能の要
     created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return str(self.post) + ' views'
+        return str(self.post) + ' views'# 管理画面でデータの判別をしやすいようstrを指定する。こちらはそれぞれの投稿と閲覧数を設定する
 
     def get_absolute_url(self):
         return reverse('post_detail', kwargs={'slug': self.post.slug})
 
 
 class Connection(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    following = models.ManyToManyField(User, related_name='followers', blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)# 1 : 1でデータを持つように設定
+    following = models.ManyToManyField(User, related_name='followers', blank=True)# 多　対　多でもちフォロワーの数を設定
     def __str__(self):
         return self.user.username
