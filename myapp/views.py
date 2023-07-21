@@ -16,38 +16,53 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
+"""
+・MTVモデルとviews.pyの役割
 
+Model（データベースに格納されているデータ、Template(テンプレートファイルによって定義されたそれぞれのページのデザイン)、View(どのページを表示させるか決定する処理)
+viewではどのページを生じするかを決定してくれます。
+具体的には送られてきたリクエストを元に、どのページを表示させるのかの決定をしています。関数で実装されているviewやクラスで実装されているものなど多岐にわたります。
+１、ブラウザはサーバーにHTTPリクエストを送信
+２、urls.pyから一致するURLパターンを検索
+３、一致したURLパターンに紐づいているviews.py内の関数を実行
+４、関数はモデル（models.py）を通してデータベース操作を行いデータを取得
+５、templateフォルダからtemplate_nameで指定されているテンプレートを取得
+６、データベースのデータ（context）をテンプレートに反映
+７、作成されたHTMLをHTTPレスポンスでブラウザに返す
+"""
 
 
 
 
 # Post Function
 def post_list(request):
-    posts = Post.objects.all().order_by('-id')
+    posts = Post.objects.all().order_by('-id')# postをID順でソートし、中身全てをコピーして posts　に引き渡します。
     ranked_posts = Post.objects.annotate(num_views=F('views') + 1).order_by('-num_views')[:5]
 
-    paginator = Paginator(posts, 9)
+    paginator = Paginator(posts, 9)# 一度に表示する投稿を9までの表示に限定。残りを別ページにて表示
     page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    page_obj = paginator.get_page(page_number)# ページナンバーを取得し表示させる
 
-    if page_number is None or int(page_number) == 1:
+    if page_number is None or int(page_number) == 1:# ページが１または、投稿が少なくてnone　の場合ランキングを表示する
         show_ranking = True
     else:
         show_ranking = False
 
     # コメントのフォームの処理
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
+    if request.method == 'POST':# フォームの送信方法をチェック、リクエストはHTTPで
+        form = CommentForm(request.POST)#forms.pyからコメントのフォームを引っ張る
         if form.is_valid():
-            comment = form.save(commit=False)
+            comment = form.save(commit=False)#まだデーターベースには反映させません
             comment.post = Post
-            comment.save()
-            return redirect('post_detail', pk=Post.pk)
+            comment.save()#データーベースに保存する
+            return redirect('post_detail', pk=Post.pk)#詳細の一覧を返す
     else:
         form = CommentForm()
-
+    #render関数　データーベースなどを反映させたHTMLページを作成して、HTTPレスポンスを返します。絶対パスで指定した’myapp/post_list.html’を返す。
+    #辞書型で返している部分にデータが格納されており、htmlに反映させてユーザーに表示する
     return render(request, 'myapp/post_list.html', {'posts': posts, 'ranked_posts': ranked_posts, 'page_obj': page_obj, 'form': form})
 
+#上記をベースに投稿の作成をする関数を作成
 def post_create(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -60,21 +75,20 @@ def post_create(request):
         form = PostForm()
     return render(request, 'myapp/post_form.html', {'form': form})
 
-
-
-
-def post_delete(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.delete()
+#投稿の削除に該当する関数
+def post_delete(request, pk): #引数のpkは、URLパターンから取得した削除対象の投稿のプライマリーキー
+    post = get_object_or_404(Post, pk=pk)#該当する投稿がない場合、404を表示
+    post.delete()#取得した投稿を削除
     return redirect('post_list')
 
+#自身投稿した投稿の一覧を表示
 def my_posts(request):
-    user = request.user
+    user = request.user#ログインしているユーザーを返します
     print(user)
-    posts = Post.objects.filter(author=user).order_by('-id')
-    paginator = Paginator(posts, 9)
+    posts = Post.objects.filter(author=user).order_by('-id')#ログインしているユーザーの投稿をID順に返す
+    paginator = Paginator(posts, 9)#ページは９まで
     page_number = request.GET.get('page')
-    user_posts = paginator.get_page(page_number)
+    user_posts = paginator.get_page(page_number)#ページNo.を表示
 
     ranked_posts = Post.objects.order_by('-views')[:10]
 
@@ -83,16 +97,17 @@ def my_posts(request):
 
 # login_required
 def post_like(request, pk):
+    # 投稿を特定するためにプライマリーキー(pk)を使用して投稿を取得
     post = get_object_or_404(Post, pk=pk)
-    if request.user in post.likes.all():
-        post.likes.remove(request.user)
+    if request.user in post.likes.all():# ログインしているユーザーが既に投稿を「いいね」しているかどうかをチェック
+        post.likes.remove(request.user)# 既に「いいね」している場合は、ユーザーを「いいね」のリストから削除
     else:
-        post.likes.add(request.user)
-    return redirect('post_detail', pk=pk)
+        post.likes.add(request.user)# まだ「いいね」していない場合は、ユーザーを「いいね」のリストに追加
+    return redirect('post_detail', pk=pk)# 「いいね」の状態を変更した後、投稿の詳細ページにリダイレクト
 
-class SignUpView(generic.CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy('login')
+class SignUpView(generic.CreateView):#継承
+    form_class = UserCreationForm #ユーザーのフォームの自動作成
+    success_url = reverse_lazy('login') #loginページにリダイレクト
     template_name = 'registration/signup.html'
 
 
